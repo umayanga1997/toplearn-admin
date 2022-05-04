@@ -20,7 +20,7 @@
     >
       <template v-slot:top>
         <v-toolbar elevation="0">
-          <v-toolbar-title>Live Classes</v-toolbar-title>
+          <v-toolbar-title>Teachers</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
@@ -132,14 +132,17 @@ export default {
         text: "Id",
         align: "start",
         sortable: false,
-        value: "id",
+        value: "user_id",
       },
+      { text: "Name", value: "name" },
+      { text: "Mobile No", value: "mobile_no" },
+      { text: "Job", value: "job" },
+      { text: "Education Qualifications", value: "edu_qualifications" },
+      { text: "Description", value: "description" },
       { text: "Grade", value: "grade" },
       { text: "Subject", value: "subject" },
-      { text: "Teacher ID", value: "teacher_id" },
-      { text: "link", value: "link" },
-      { text: "Create Date", value: "create_date" },
-      { text: "Last Update Date", value: "last_update_date" },
+      { text: "Active", value: "active" },
+      { text: "Register Date", value: "reg_date" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     items: [],
