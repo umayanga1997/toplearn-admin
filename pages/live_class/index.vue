@@ -18,6 +18,12 @@
       :loading="loading"
       :search="search"
     >
+      <template v-slot:item.create_date="{ item }">
+        <span>{{ dateTimeFormater(item.create_date) }}</span>
+      </template>
+      <template v-slot:item.last_update_date="{ item }">
+        <span>{{ dateTimeFormater(item.last_update_date) }}</span>
+      </template>
       <template v-slot:top>
         <v-toolbar elevation="0">
           <v-toolbar-title>Live Classes</v-toolbar-title>
@@ -64,7 +70,7 @@
                     <v-col cols="12" md="6" lg="6" sm="12">
                       <v-combobox
                         :items="tIdsList"
-                        v-model="editedItem.teahcer_id"
+                        v-model="editedItem.teacher_id"
                         label="Teacher ID"
                         dense
                         outlined
@@ -139,11 +145,18 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
+                <v-btn
+                  :disabled="btnLoading"
+                  color="blue darken-1"
+                  text
+                  @click="close"
+                >
                   Cancel
                 </v-btn>
                 <v-btn
                   color="blue darken-1"
+                  :disabled="btnLoading"
+                  :loading="btnLoading"
                   text
                   @click="dialogType == 'a' ? saveData() : updateData()"
                 >
@@ -193,6 +206,7 @@
 </template>
 
 <script>
+import { v4 as uuid } from "uuid";
 var liveClassRef;
 var teachersRef;
 
@@ -206,6 +220,7 @@ export default {
     dateMenu: false,
     timeMenu: false,
     tIdsList: [],
+    tDataList: [],
     search: "",
     headers: [
       {
@@ -260,7 +275,9 @@ export default {
         });
         teachersRef.onSnapshot((querySnapshot) => {
           this.tIdsList = [];
+          this.tDataList = [];
           querySnapshot.docs.forEach((doc) => {
+            this.tDataList.push(doc.data());
             this.tIdsList.push(doc.data()["teacher_id"]);
           });
         });
@@ -280,14 +297,15 @@ export default {
         this.btnLoading = true;
         var id = uuid();
         // Get Full details from items list [] using selected stock id
-        var selectedData = this.tIdsList.find((value) => {
+        var selectedData = this.tDataList.find((value) => {
           return value.teacher_id == this.editedItem.teacher_id;
         });
+
         liveClassRef
           .doc(id)
           .set({
             id: id,
-            grade_name: selectedData.grade_name,
+            grade: selectedData.grade,
             subject: selectedData.subject,
             teacher_id: this.editedItem.teacher_id,
             link: this.editedItem.link,
@@ -310,13 +328,13 @@ export default {
       try {
         this.btnLoading = true;
         // Get Full details from items list [] using selected stock id
-        var selectedData = this.tIdsList.find((value) => {
+        var selectedData = this.tDataList.find((value) => {
           return value.teacher_id == this.editedItem.teacher_id;
         });
         liveClassRef
           .doc(this.editedItem.id)
           .update({
-            grade_name: selectedData.grade_name,
+            grade: selectedData.grade,
             subject: selectedData.subject,
             teacher_id: this.editedItem.teacher_id,
             link: this.editedItem.link,

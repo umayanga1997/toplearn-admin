@@ -19,7 +19,6 @@
       :search="search"
     >
       <template v-slot:item.reg_date="{ item }">
-        <!-- <span>{{item.reg_date}}</span> -->
         <span>{{ dateTimeFormater(item.reg_date) }}</span>
       </template>
       <template v-slot:top>
