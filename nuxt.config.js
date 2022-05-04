@@ -39,8 +39,38 @@ export default {
     // https://go.nuxtjs.dev/axios
     "@nuxtjs/axios",
     // "@nuxtjs/style-resources",
+    [
+      "@nuxtjs/firebase",
+      {
+        config: {
+          apiKey: "AIzaSyA1KDvUVlctrq2NVefxU9WTmhBwA2I9-Q8",
+          authDomain: "top-learn-81d57.firebaseapp.com",
+          projectId: "top-learn-81d57",
+          storageBucket: "top-learn-81d57.appspot.com",
+          messagingSenderId: "671523244033",
+          appId: "1:671523244033:web:83f128e817299652a35800",
+          measurementId: "G-T7WD4KB992",
+        },
+        services: {
+          auth: true,
+          firestore: true,
+          // functions: true,
+          // storage: true,
+          // database: true,
+          messaging: true,
+          // performance: true,
+          analytics: true,
+          // remoteConfig: true
+        },
+      },
+    ],
   ],
 
+  firestore: {
+    // ...
+    enablePersistence: true
+  },
+  
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308

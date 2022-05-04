@@ -39,7 +39,7 @@
                     <v-row>
                       <v-col>
                         <v-text-field
-                          v-model="editedItem.grade"
+                          v-model="editedItem.grade_name"
                           label="Grade"
                           dense
                           outlined
@@ -106,7 +106,7 @@ export default {
         sortable: false,
         value: "id",
       },
-      { text: "Grade", value: "grade" },
+      { text: "Grade", value: "grade_name" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     items: [],
@@ -128,24 +128,39 @@ export default {
       val || this.closeDelete();
     },
   },
-
   created() {
     this.initialize();
   },
 
   methods: {
-    initialize() {},
+    initialize() {
+      try {
+        this.loading = true;
+        this.items = [];
+        this.$fire.firestore
+          .collection("grades")
+          .onSnapshot((querySnapshot) => {
+            querySnapshot.docs.forEach((doc) => {
+              this.items.push(doc.data());
+            });
+            this.loading = false;
+          });
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+      }
+    },
 
     save() {},
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
