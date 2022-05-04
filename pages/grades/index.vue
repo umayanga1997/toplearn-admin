@@ -33,7 +33,7 @@
                   v-bind="attrs"
                   v-on="on"
                 >
-                  New Item
+                  New
                 </v-btn>
               </template>
               <v-card v-if="dialogType != 'd'">
@@ -146,7 +146,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New" : "Edit";
     },
   },
 

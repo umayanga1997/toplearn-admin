@@ -27,10 +27,10 @@
           <v-dialog v-model="dialog" max-width="600px">
             <!-- <template v-slot:activator="{ on, attrs }">
               <v-btn color="green darken-2" dark v-bind="attrs" v-on="on">
-                New Item
+                New
               </v-btn>
             </template> -->
-            <v-card>
+            <v-card v-if="dialogType != 'd'">
               <v-card-title>
                 <span class="text-h5">{{ formTitle }}</span>
               </v-card-title>
@@ -106,21 +106,34 @@
                 <v-btn color="blue darken-1" text @click="close">
                   Cancel
                 </v-btn>
-                <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="dialogType == 'a' ? saveData() : updateData()"
+                >
+                  Save
+                </v-btn>
               </v-card-actions>
             </v-card>
-          </v-dialog>
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
+            <v-card v-else>
               <v-card-title class="text-h5"
                 >Are you sure you want to delete this item?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
+                <v-btn
+                  :disabled="btnLoading"
+                  color="blue darken-1"
+                  text
+                  @click="close"
                   >Cancel</v-btn
                 >
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                <v-btn
+                  :disabled="btnLoading"
+                  :loading="btnLoading"
+                  color="blue darken-1"
+                  text
+                  @click="deleteData()"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -130,8 +143,10 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <!-- <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon> -->
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon small class="mr-2" @click="dialogAction(item, 'e')">
+          mdi-pencil
+        </v-icon>
+        <v-icon small @click="dialogAction(item, 'd')"> mdi-delete </v-icon>
       </template>
       <!-- <template v-slot:no-data>
           <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -142,12 +157,16 @@
 </template>
 
 <script>
+import { v4 as uuid } from "uuid";
+var studentsRef;
+
 export default {
   name: "live_class_screen",
   data: () => ({
     dialog: false,
-    dialogDelete: false,
+    dialogType: "a",
     loading: false,
+    btnLoading: false,
     // gradesList: [],
     // subjectsList: [],
     tIdsList: [],
@@ -157,7 +176,7 @@ export default {
         text: "Id",
         align: "start",
         sortable: false,
-        value: "user_id",
+        value: "student_id",
       },
       { text: "Name of Student", value: "name" },
       { text: "Name of Trustee", value: "name_of_trustee" },
@@ -176,7 +195,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New" : "Edit";
     },
   },
 
@@ -184,45 +203,114 @@ export default {
     dialog(val) {
       val || this.close();
     },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
   },
 
   created() {
+    studentsRef = this.$fire.firestore.collection("students");
     this.initialize();
   },
 
   methods: {
-    initialize() {},
-
-    save() {},
-
-    editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+    initialize() {
+      try {
+        this.loading = true;
+        studentsRef.onSnapshot((querySnapshot) => {
+          this.items = [];
+          querySnapshot.docs.forEach((doc) => {
+            this.items.push(doc.data());
+          });
+          this.loading = false;
+        });
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+      }
+    },
+    dialogAction(item, type) {
+      this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      this.dialogType = type;
       this.dialog = true;
     },
-
-    deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
+    saveData() {
+      try {
+        this.btnLoading = true;
+        var id = uuid();
+        studentsRef
+          .doc(id)
+          .set({
+            auth_id: null,
+            student_id: id,
+            name: this.editedItem.name,
+            name_of_trustee: this.editedItem.name_of_trustee,
+            mobile_no: this.editedItem.mobile_no,
+            email: this.editedItem.email,
+            password: this.editedItem.password,
+            grade: this.editedItem.grade,
+            subject: this.editedItem.subject,
+            active: this.editedItem.active,
+            reg_date: this.editedItem.reg_date,
+          })
+          .then(() => {
+            this.$store.dispatch("alertState/message", [
+              "Data added successfully.",
+              "success",
+            ]);
+            this.btnLoading = false;
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
-
-    deleteItemConfirm() {
-      this.closeDelete();
+    updateData() {
+      try {
+        this.btnLoading = true;
+        studentsRef
+          .doc(this.editedItem.id)
+          .update({
+            // auth_id: null,
+            // student_id: id,
+            // name: this.editedItem.name,
+            // name_of_trustee: this.editedItem.name_of_trustee,
+            // mobile_no: this.editedItem.mobile_no,
+            // email: this.editedItem.email,
+            // password: this.editedItem.password,
+            // grade: this.editedItem.grade,
+            // subject: this.editedItem.subject,
+            active: this.editedItem.active,
+            // reg_date: this.editedItem.reg_date,
+          })
+          .then(() => {
+            this.$store.dispatch("alertState/message", [
+              "Data updated successfully.",
+              "success",
+            ]);
+            this.btnLoading = false;
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
-
+    deleteData() {
+      try {
+        this.btnLoading = true;
+        studentsRef
+          .doc(this.editedItem.id)
+          .delete()
+          .then(() => {
+            this.$store.dispatch("alertState/message", [
+              "Data deleted successfully.",
+              "success",
+            ]);
+            this.btnLoading = false;
+            this.close();
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    },
     close() {
       this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-      });
-    },
-
-    closeDelete() {
-      this.dialogDelete = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
       });

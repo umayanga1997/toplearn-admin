@@ -33,7 +33,7 @@
                   @click="dialogAction(null, 'a')"
                   v-on="on"
                 >
-                  New Item
+                  New
                   {{ dialogType }}
                 </v-btn>
               </template>
@@ -147,7 +147,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New" : "Edit";
     },
   },
 

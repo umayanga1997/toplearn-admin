@@ -27,7 +27,7 @@
           <!-- <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="green darken-2" dark v-bind="attrs" v-on="on">
-                New Item
+                New
               </v-btn>
             </template>
             <v-card>
@@ -119,7 +119,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "New" : "Edit";
     },
   },
 
