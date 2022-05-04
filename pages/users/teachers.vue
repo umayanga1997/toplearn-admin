@@ -18,6 +18,10 @@
       :loading="loading"
       :search="search"
     >
+      <template v-slot:item.reg_date="{ item }">
+        <!-- <span>{{item.reg_date}}</span> -->
+        <span>{{ dateTimeFormater(item.reg_date) }}</span>
+      </template>
       <template v-slot:top>
         <v-toolbar elevation="0">
           <v-toolbar-title>Teachers</v-toolbar-title>
@@ -26,7 +30,13 @@
 
           <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="green darken-2" dark v-bind="attrs" v-on="on">
+              <v-btn
+                @click="dialogAction(null, 'a')"
+                color="green darken-2"
+                dark
+                v-bind="attrs"
+                v-on="on"
+              >
                 New
               </v-btn>
             </template>
@@ -37,6 +47,20 @@
               <v-card-text>
                 <v-container>
                   <v-row>
+                    <v-col
+                      v-if="dialogType == 'a'"
+                      cols="12"
+                      md="6"
+                      lg="6"
+                      sm="12"
+                    >
+                      <v-text-field
+                        v-model="editedItem.teacher_id"
+                        label="Teacher ID"
+                        dense
+                        outlined
+                      ></v-text-field>
+                    </v-col>
                     <v-col cols="12" md="6" lg="6" sm="12">
                       <v-text-field
                         v-model="editedItem.name"
@@ -61,7 +85,13 @@
                         outlined
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" md="6" lg="6" sm="12"></v-col>
+                    <v-col
+                      v-if="dialogType == 'e'"
+                      cols="12"
+                      md="6"
+                      lg="6"
+                      sm="12"
+                    ></v-col>
                     <v-col cols="12" md="6" lg="6" sm="12">
                       <v-text-field
                         v-model="editedItem.email"
@@ -137,6 +167,8 @@
                   Cancel
                 </v-btn>
                 <v-btn
+                  :disabled="btnLoading"
+                  :loading="btnLoading"
                   color="blue darken-1"
                   text
                   @click="dialogType == 'a' ? saveData() : updateData()"
@@ -188,6 +220,8 @@
 
 <script>
 import { v4 as uuid } from "uuid";
+var gradesRef;
+var subjectsRef;
 var teachersRef;
 
 export default {
@@ -199,7 +233,6 @@ export default {
     btnLoading: false,
     gradesList: [],
     subjectsList: [],
-    tIdsList: [],
     search: "",
     headers: [
       {
@@ -238,6 +271,8 @@ export default {
   },
 
   created() {
+    gradesRef = this.$fire.firestore.collection("grades");
+    subjectsRef = this.$fire.firestore.collection("subjects");
     teachersRef = this.$fire.firestore.collection("teachers");
     this.initialize();
   },
@@ -253,6 +288,18 @@ export default {
           });
           this.loading = false;
         });
+        gradesRef.onSnapshot((querySnapshot) => {
+          this.gradesList = [];
+          querySnapshot.docs.forEach((doc) => {
+            this.gradesList.push(doc.data()["grade_name"]);
+          });
+        });
+        subjectsRef.onSnapshot((querySnapshot) => {
+          this.subjectsList = [];
+          querySnapshot.docs.forEach((doc) => {
+            this.subjectsList.push(doc.data()["subject"]);
+          });
+        });
       } catch (error) {
         console.log(error);
         this.loading = false;
@@ -267,41 +314,60 @@ export default {
     saveData() {
       try {
         this.btnLoading = true;
-        var id = uuid();
-
-        teachersRef
-          .doc(id)
-          .set({
-            auth_id: null,
-            teacher_id: id,
-            name: this.editedItem.name,
-            mobile_no: this.editedItem.mobile_no,
-            job: this.editedItem.job,
-            email: this.editedItem.email,
-            password: this.editedItem.password,
-            edu_qualifications: this.editedItem.edu_qualifications,
-            description: this.editedItem.description,
-            grade: this.editedItem.grade,
-            subject: this.editedItem.subject,
-            active: this.editedItem.active,
-            reg_date: this.editedItem.reg_date,
+        // Firebase auth
+        this.$fire.auth
+          .createUserWithEmailAndPassword(
+            this.editedItem.email,
+            this.editedItem.password
+          )
+          .then((userCredential) => {
+            // Signed in
+            console.log(userCredential.user?.uid);
+            return userCredential.user?.uid;
           })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data added successfully.",
-              "success",
-            ]);
+          .then((authID) => {
+            this.editedItem.teacher_id =
+              "T" + this.editedItem.teacher_id.replace("T", "");
+
+            teachersRef
+              .doc(authID)
+              .set({
+                auth_id: authID,
+                teacher_id: this.editedItem.teacher_id,
+                name: this.editedItem.name,
+                mobile_no: this.editedItem.mobile_no,
+                job: this.editedItem.job,
+                email: this.editedItem.email,
+                password: this.editedItem.password,
+                edu_qualifications: this.editedItem.edu_qualifications,
+                description: this.editedItem.description,
+                grade: this.editedItem.grade,
+                subject: this.editedItem.subject,
+                active: this.editedItem.active,
+                reg_date: new Date(),
+              })
+              .then(() => {
+                this.$store.dispatch("alertState/message", [
+                  "Data added successfully.",
+                  "success",
+                ]);
+                this.btnLoading = false;
+              });
+          })
+          .catch((error) => {
             this.btnLoading = false;
+            this.$store.dispatch("alertState/message", [error, "error"]);
           });
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     updateData() {
       try {
         this.btnLoading = true;
         teachersRef
-          .doc(this.editedItem.id)
+          .doc(this.editedItem.auth_id)
           .update({
             // auth_id: null,
             // teacher_id: id,
@@ -315,7 +381,7 @@ export default {
             grade: this.editedItem.grade,
             subject: this.editedItem.subject,
             active: this.editedItem.active,
-            reg_date: this.editedItem.reg_date,
+            // reg_date: this.editedItem.reg_date,
           })
           .then(() => {
             this.$store.dispatch("alertState/message", [
@@ -332,7 +398,7 @@ export default {
       try {
         this.btnLoading = true;
         teachersRef
-          .doc(this.editedItem.id)
+          .doc(this.editedItem.auth_id)
           .delete()
           .then(() => {
             this.$store.dispatch("alertState/message", [

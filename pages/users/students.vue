@@ -107,6 +107,8 @@
                   Cancel
                 </v-btn>
                 <v-btn
+                  :disabled="btnLoading"
+                  :loading="btnLoading"
                   color="blue darken-1"
                   text
                   @click="dialogType == 'a' ? saveData() : updateData()"
@@ -169,7 +171,7 @@ export default {
     btnLoading: false,
     // gradesList: [],
     // subjectsList: [],
-    tIdsList: [],
+    // tIdsList: [],
     search: "",
     headers: [
       {
