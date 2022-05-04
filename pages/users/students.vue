@@ -20,16 +20,16 @@
     >
       <template v-slot:top>
         <v-toolbar elevation="0">
-          <v-toolbar-title>Teachers</v-toolbar-title>
+          <v-toolbar-title>Students</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
           <v-dialog v-model="dialog" max-width="600px">
-            <template v-slot:activator="{ on, attrs }">
+            <!-- <template v-slot:activator="{ on, attrs }">
               <v-btn color="green darken-2" dark v-bind="attrs" v-on="on">
                 New Item
               </v-btn>
-            </template>
+            </template> -->
             <v-card>
               <v-card-title>
                 <span class="text-h5">{{ formTitle }}</span>
@@ -38,9 +38,18 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" md="6" lg="6" sm="12">
+                      <v-select
+                        :items="[true, false]"
+                        v-model="editedItem.active"
+                        label="Active"
+                        dense
+                        outlined
+                      ></v-select>
+                    </v-col>
+                    <!-- <v-col cols="12" md="6" lg="6" sm="12">
                       <v-text-field
-                        v-model="editedItem.name"
-                        label="Name"
+                        v-model="editedItem.name_of_trustee"
+                        label="Name of Trustee"
                         dense
                         outlined
                       ></v-text-field>
@@ -53,14 +62,7 @@
                         outlined
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" md="6" lg="6" sm="12">
-                      <v-text-field
-                        v-model="editedItem.job"
-                        label="Job"
-                        dense
-                        outlined
-                      ></v-text-field>
-                    </v-col>
+
                     <v-col cols="12" md="6" lg="6" sm="12">
                       <v-text-field
                         v-model="editedItem.email"
@@ -68,28 +70,6 @@
                         dense
                         outlined
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-textarea
-                        v-model="editedItem.edu_qualifications"
-                        label="Education Qualifications"
-                        dense
-                        outlined
-                        class="text-area-max-height"
-                        height="110"
-                        no-resize
-                      ></v-textarea>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-textarea
-                        v-model="editedItem.description"
-                        label="Description"
-                        dense
-                        outlined
-                        class="text-area-max-height"
-                        height="110"
-                        no-resize
-                      ></v-textarea>
                     </v-col>
                     <v-col cols="12" md="6" lg="6" sm="12">
                       <v-combobox
@@ -116,7 +96,7 @@
                         dense
                         outlined
                       ></v-text-field>
-                    </v-col>
+                    </v-col> -->
                   </v-row>
                 </v-container>
               </v-card-text>
@@ -168,8 +148,8 @@ export default {
     dialog: false,
     dialogDelete: false,
     loading: false,
-    gradesList: [],
-    subjectsList: [],
+    // gradesList: [],
+    // subjectsList: [],
     tIdsList: [],
     search: "",
     headers: [
@@ -179,12 +159,10 @@ export default {
         sortable: false,
         value: "user_id",
       },
-      { text: "Name", value: "name" },
+      { text: "Name of Student", value: "name" },
+      { text: "Name of Trustee", value: "name_of_trustee" },
       { text: "Mobile No", value: "mobile_no" },
-      { text: "Job", value: "job" },
       { text: "Email", value: "email" },
-      { text: "Education Qualifications", value: "edu_qualifications" },
-      { text: "Description", value: "description" },
       { text: "Grade", value: "grade" },
       { text: "Subject", value: "subject" },
       { text: "Active", value: "active" },

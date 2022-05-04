@@ -83,6 +83,11 @@ export default {
           title: "Teachers",
           to: "/users/teachers",
         },
+        {
+          icon: "mdi-account-group",
+          title: "Students",
+          to: "/users/students",
+        },
       ],
     };
   },
