@@ -38,6 +38,23 @@
     <v-footer absolute app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+    <!-- Message -->
+    <v-snackbar
+      v-model="isAlertShow"
+      top
+      shaped
+      content-class="snack_content"
+      centered
+      :color="
+        alertType == 'error'
+          ? 'red darken-4'
+          : alertType == 'warning'
+          ? 'orange darken-4'
+          : 'green darken-4'
+      "
+    >
+      {{ message }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -90,6 +107,17 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    isAlertShow() {
+      return this.$store.getters["alertState/isAlertShow"];
+    },
+    alertType() {
+      return this.$store.getters["alertState/alert_type"];
+    },
+    message() {
+      return this.$store.getters["alertState/msg"];
+    },
   },
 };
 </script>
