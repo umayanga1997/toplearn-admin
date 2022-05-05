@@ -58,7 +58,6 @@ export default {
   name: "videos_screen",
   data: () => ({
     dialog: false,
-    dialogDelete: false,
     // dialogType: "a",
     loading: false,
     btnLoading: false,
