@@ -18,6 +18,12 @@
       :loading="loading"
       :search="search"
     >
+      <template v-slot:item.create_date="{ item }">
+        <span>{{ dateTimeFormater(item.create_date) }}</span>
+      </template>
+      <template v-slot:item.last_update_date="{ item }">
+        <span>{{ dateTimeFormater(item.last_update_date) }}</span>
+      </template>
       <template v-slot:top>
         <v-toolbar elevation="0">
           <v-toolbar-title>Videos</v-toolbar-title>
@@ -74,6 +80,7 @@ export default {
       { text: "Teacher ID", value: "teacher_id" },
       { text: "Topic", value: "topic" },
       { text: "Medium", value: "medium" },
+      { text: "Description", value: "description" },
       { text: "Video Link", value: "video_link" },
       { text: "Create Date", value: "create_date" },
       { text: "Last Update Date", value: "last_update_date" },
