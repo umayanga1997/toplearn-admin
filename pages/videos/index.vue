@@ -72,6 +72,7 @@ export default {
       { text: "Grade", value: "grade" },
       { text: "Subject", value: "subject" },
       { text: "Teacher ID", value: "teacher_id" },
+      { text: "Topic", value: "topic" },
       { text: "Medium", value: "medium" },
       { text: "Video Link", value: "video_link" },
       { text: "Create Date", value: "create_date" },
