@@ -37,8 +37,21 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="deleteData">OK</v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  :disabled="btnLoading"
+                  text
+                  @click="close"
+                  >Cancel</v-btn
+                >
+                <v-btn
+                  color="blue darken-1"
+                  :disabled="btnLoading"
+                  :loading="btnLoading"
+                  text
+                  @click="deleteData"
+                  >OK</v-btn
+                >
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
