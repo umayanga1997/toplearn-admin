@@ -81,6 +81,11 @@ export default {
           to: "/subjects",
         },
         {
+          icon: "mdi-apache-kafka",
+          title: "Topics",
+          to: "/topics",
+        },
+        {
           icon: "mdi-video-box",
           title: "Videos",
           to: "/videos",

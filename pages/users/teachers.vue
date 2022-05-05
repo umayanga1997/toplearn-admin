@@ -77,12 +77,13 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" md="6" lg="6" sm="12">
-                      <v-text-field
-                        v-model="editedItem.job"
-                        label="Job"
+                      <v-select
+                        v-model="editedItem.medium"
+                        :items="['Sinhala', 'Tamil', 'English']"
+                        label="Medium"
                         dense
                         outlined
-                      ></v-text-field>
+                      ></v-select>
                     </v-col>
                     <v-col
                       v-if="dialogType == 'e'"
@@ -242,7 +243,7 @@ export default {
       },
       { text: "Name", value: "name" },
       { text: "Mobile No", value: "mobile_no" },
-      { text: "Job", value: "job" },
+      { text: "Medium", value: "medium" },
       { text: "Email", value: "email" },
       { text: "Education Qualifications", value: "edu_qualifications" },
       { text: "Description", value: "description" },
@@ -335,7 +336,7 @@ export default {
                 teacher_id: this.editedItem.teacher_id,
                 name: this.editedItem.name,
                 mobile_no: this.editedItem.mobile_no,
-                job: this.editedItem.job,
+                medium: this.editedItem.medium,
                 email: this.editedItem.email,
                 password: this.editedItem.password,
                 edu_qualifications: this.editedItem.edu_qualifications,
@@ -372,7 +373,7 @@ export default {
             // teacher_id: id,
             name: this.editedItem.name,
             mobile_no: this.editedItem.mobile_no,
-            job: this.editedItem.job,
+            medium: this.editedItem.medium,
             // email: this.editedItem.email,
             // password: this.editedItem.password,
             edu_qualifications: this.editedItem.edu_qualifications,

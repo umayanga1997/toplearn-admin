@@ -107,6 +107,7 @@ export default {
       { text: "Grade", value: "grade" },
       { text: "Subject", value: "subject" },
       { text: "Teacher ID", value: "teacher_id" },
+      { text: "Medium", value: "medium" },
       { text: "Test Type", value: "test_type" },
       { text: "Create Date", value: "create_date" },
       { text: "Last Update Date", value: "last_update_date" },
