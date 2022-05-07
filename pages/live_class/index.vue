@@ -72,6 +72,7 @@
                         :items="tIdsList"
                         v-model="editedItem.teacher_id"
                         label="Teacher ID"
+                        @change="loadTopics"
                         dense
                         outlined
                       ></v-combobox>
@@ -130,6 +131,15 @@
                           @input="timeMenu = false"
                         ></v-time-picker>
                       </v-menu>
+                    </v-col>
+                    <v-col cols="12" md="6" lg="6" sm="12" class="pa-0 ma-0">
+                      <v-select
+                        :items="topicList"
+                        v-model="editedItem.topic"
+                        label="Topic"
+                        dense
+                        outlined
+                      ></v-select>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -209,6 +219,7 @@
 import { v4 as uuid } from "uuid";
 var liveClassRef;
 var teachersRef;
+var topicsRef;
 
 export default {
   name: "live_class_screen",
@@ -221,6 +232,7 @@ export default {
     timeMenu: false,
     tIdsList: [],
     tDataList: [],
+    topicList: [],
     search: "",
     headers: [
       {
@@ -231,6 +243,7 @@ export default {
       },
       { text: "Grade", value: "grade_name" },
       { text: "Subject", value: "subject" },
+      { text: "Topic", value: "topic" },
       { text: "Teacher ID", value: "teacher_id" },
       { text: "Teacher Name", value: "teacher_name" },
       { text: "Medium", value: "medium" },
@@ -261,6 +274,7 @@ export default {
   created() {
     liveClassRef = this.$fire.firestore.collection("live_classes");
     teachersRef = this.$fire.firestore.collection("teachers");
+    topicsRef = this.$fire.firestore.collection("topics");
     this.initialize();
   },
 
@@ -294,6 +308,24 @@ export default {
       this.dialogType = type;
       this.dialog = true;
     },
+    loadTopics(data) {
+      try {
+        var selectedData = this.tDataList.find((value) => {
+          return value.teacher_id == data;
+        });
+        topicsRef
+          .where("grade", "==", selectedData.grade)
+          .where("subject", "==", selectedData.subject)
+          .onSnapshot((querySnapshot) => {
+            this.topicList = [];
+            querySnapshot.docs.forEach((doc) => {
+              this.topicList.push(doc.data()["topic"]);
+            });
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    },
     saveData() {
       try {
         this.btnLoading = true;
@@ -311,6 +343,7 @@ export default {
             subject: selectedData.subject,
             teacher_id: this.editedItem.teacher_id,
             teacher_name: selectedData.name,
+            topic: this.editedItem.topic,
             medium: selectedData.medium,
             link: this.editedItem.link,
             schedule_date: this.editedItem.schedule_date,
@@ -342,6 +375,7 @@ export default {
             subject: selectedData.subject,
             teacher_id: this.editedItem.teacher_id,
             teacher_name: selectedData.name,
+            topic: this.editedItem.topic,
             medium: selectedData.medium,
             link: this.editedItem.link,
             schedule_date: this.editedItem.schedule_date,

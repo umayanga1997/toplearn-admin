@@ -92,6 +92,7 @@ export default {
       { text: "Subject", value: "subject" },
       { text: "Teacher ID", value: "teacher_id" },
       { text: "Topic", value: "topic" },
+      { text: "Price", value: "price" },
       { text: "Medium", value: "medium" },
       { text: "Description", value: "description" },
       { text: "Video Link", value: "video_link" },
