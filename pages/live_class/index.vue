@@ -132,7 +132,7 @@
                         ></v-time-picker>
                       </v-menu>
                     </v-col>
-                    <v-col cols="12" md="6" lg="6" sm="12" class="pa-0 ma-0">
+                    <v-col cols="12" md="6" lg="6" sm="12">
                       <v-select
                         :items="topicList"
                         v-model="editedItem.topic"
@@ -140,6 +140,14 @@
                         dense
                         outlined
                       ></v-select>
+                    </v-col>
+                    <v-col cols="12" md="6" lg="6" sm="12">
+                      <v-text-field
+                        v-model="editedItem.price"
+                        label="Price"
+                        dense
+                        outlined
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <v-text-field
@@ -244,6 +252,7 @@ export default {
       { text: "Grade", value: "grade_name" },
       { text: "Subject", value: "subject" },
       { text: "Topic", value: "topic" },
+      { text: "Price", value: "price" },
       { text: "Teacher ID", value: "teacher_id" },
       { text: "Teacher Name", value: "teacher_name" },
       { text: "Medium", value: "medium" },
@@ -344,6 +353,7 @@ export default {
             teacher_id: this.editedItem.teacher_id,
             teacher_name: selectedData.name,
             topic: this.editedItem.topic,
+            price: Number(this.editedItem?.price),
             medium: selectedData.medium,
             link: this.editedItem.link,
             schedule_date: this.editedItem.schedule_date,
@@ -376,6 +386,7 @@ export default {
             teacher_id: this.editedItem.teacher_id,
             teacher_name: selectedData.name,
             topic: this.editedItem.topic,
+            price: Number(this.editedItem?.price),
             medium: selectedData.medium,
             link: this.editedItem.link,
             schedule_date: this.editedItem.schedule_date,
