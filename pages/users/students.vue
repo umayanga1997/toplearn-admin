@@ -234,36 +234,37 @@ export default {
       this.dialogType = type;
       this.dialog = true;
     },
-    saveData() {
-      try {
-        this.btnLoading = true;
-        var id = uuid();
-        studentsRef
-          .doc(id)
-          .set({
-            auth_id: null,
-            student_id: id,
-            name: this.editedItem.name,
-            name_of_trustee: this.editedItem.name_of_trustee,
-            mobile_no: this.editedItem.mobile_no,
-            email: this.editedItem.email,
-            password: this.editedItem.password,
-            grade: this.editedItem.grade,
-            subject: this.editedItem.subject,
-            active: this.editedItem.active,
-            reg_date: this.editedItem.reg_date,
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data added successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    // saveData() {
+    //   try {
+    //     this.btnLoading = true;
+    //     var id = uuid();
+    //     studentsRef
+    //       .doc(id)
+    //       .set({
+    //         auth_id: null,
+    //         student_id: id,
+    //         name: this.editedItem.name,
+    //         name_of_trustee: this.editedItem.name_of_trustee,
+    //         mobile_no: this.editedItem.mobile_no,
+    //         email: this.editedItem.email,
+    //         password: this.editedItem.password,
+    //         grade: this.editedItem.grade,
+    //         subject: this.editedItem.subject,
+    //         active: this.editedItem.active,
+    //         reg_date: this.editedItem.reg_date,
+    //       })
+    //       .then(() => {
+    //         this.$store.dispatch("alertState/message", [
+    //           "Data added successfully.",
+    //           "success",
+    //         ]);
+    //         this.btnLoading = false;
+    //       });
+    //   } catch (error) {
+    //     console.log(error);
+    //     this.btnLoading = false;
+    //   }
+    // },
     updateData() {
       try {
         this.btnLoading = true;
@@ -291,6 +292,7 @@ export default {
           });
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     deleteData() {
@@ -309,6 +311,7 @@ export default {
           });
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     close() {

@@ -337,71 +337,137 @@ export default {
     },
     saveData() {
       try {
-        this.btnLoading = true;
-        var id = uuid();
-        // Get Full details from items list [] using selected stock id
-        var selectedData = this.tDataList.find((value) => {
-          return value.teacher_id == this.editedItem.teacher_id;
-        });
-
-        liveClassRef
-          .doc(id)
-          .set({
-            id: id,
-            grade: selectedData.grade,
-            subject: selectedData.subject,
-            teacher_id: this.editedItem.teacher_id,
-            teacher_name: selectedData.name,
-            topic: this.editedItem.topic,
-            price: Number(this.editedItem?.price),
-            medium: selectedData.medium,
-            link: this.editedItem.link,
-            schedule_date: this.editedItem.schedule_date,
-            schedule_time: this.editedItem.schedule_time,
-            create_date: new Date(),
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data added successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
+        if (
+          this.editedItem.teacher_id == null ||
+          this.editedItem.teacher_id == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Teacher ID",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.topic == null ||
+          this.editedItem.topic == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Topic",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.price == null ||
+          this.editedItem.price == "" ||
+          Number(this.editedItem.price ?? 0) <= 0
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Price",
+            "error",
+          ]);
+        } else if (this.editedItem.link == null || this.editedItem.link == "") {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Link",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.schedule_date == null ||
+          this.editedItem.schedule_date == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Schedule Date",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.schedule_time == null ||
+          this.editedItem.schedule_time == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Schedule Time",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
+          var id = uuid();
+          // Get Full details from items list [] using selected stock id
+          var selectedData = this.tDataList.find((value) => {
+            return value.teacher_id == this.editedItem.teacher_id;
           });
+
+          liveClassRef
+            .doc(id)
+            .set({
+              id: id,
+              grade: selectedData.grade,
+              subject: selectedData.subject,
+              teacher_id: this.editedItem.teacher_id,
+              teacher_name: selectedData.name,
+              topic: this.editedItem.topic,
+              price: Number(this.editedItem?.price),
+              medium: selectedData.medium,
+              link: this.editedItem.link,
+              schedule_date: this.editedItem.schedule_date,
+              schedule_time: this.editedItem.schedule_time,
+              create_date: new Date(),
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data added successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            });
+        }
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     updateData() {
       try {
-        this.btnLoading = true;
-        // Get Full details from items list [] using selected stock id
-        var selectedData = this.tDataList.find((value) => {
-          return value.teacher_id == this.editedItem.teacher_id;
-        });
-        liveClassRef
-          .doc(this.editedItem.id)
-          .update({
-            grade: selectedData.grade,
-            subject: selectedData.subject,
-            teacher_id: this.editedItem.teacher_id,
-            teacher_name: selectedData.name,
-            topic: this.editedItem.topic,
-            price: Number(this.editedItem?.price),
-            medium: selectedData.medium,
-            link: this.editedItem.link,
-            schedule_date: this.editedItem.schedule_date,
-            schedule_time: this.editedItem.schedule_time,
-            last_update_date: new Date(),
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data updated successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
+        if (
+          this.editedItem.price == null ||
+          this.editedItem.price == "" ||
+          Number(this.editedItem.price ?? 0) <= 0
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Price",
+            "error",
+          ]);
+        } else if (this.editedItem.link == null || this.editedItem.link == "") {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Link",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
+          // Get Full details from items list [] using selected stock id
+          var selectedData = this.tDataList.find((value) => {
+            return value.teacher_id == this.editedItem.teacher_id;
           });
+          liveClassRef
+            .doc(this.editedItem.id)
+            .update({
+              grade: selectedData.grade,
+              subject: selectedData.subject,
+              teacher_id: this.editedItem.teacher_id,
+              teacher_name: selectedData.name,
+              topic: this.editedItem.topic,
+              price: Number(this.editedItem?.price),
+              medium: selectedData.medium,
+              link: this.editedItem.link,
+              schedule_date: this.editedItem.schedule_date,
+              schedule_time: this.editedItem.schedule_time,
+              last_update_date: new Date(),
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data updated successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            });
+        }
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     deleteData() {
@@ -420,6 +486,7 @@ export default {
           });
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     close() {

@@ -185,42 +185,58 @@ export default {
     },
     saveData() {
       try {
-        this.btnLoading = true;
-        var id = uuid();
-        subjectsRef
-          .doc(id)
-          .set({
-            id: id,
-            subject: this.editedItem.subject,
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data added successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
-          });
+        if (this.editedItem.subject == null || this.editedItem.subject == "") {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Subject",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
+          var id = uuid();
+          subjectsRef
+            .doc(id)
+            .set({
+              id: id,
+              subject: this.editedItem.subject,
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data added successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            });
+        }
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     updateData() {
       try {
-        this.btnLoading = true;
-        subjectsRef
-          .doc(this.editedItem.id)
-          .update({
-            subject: this.editedItem.subject,
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data updated successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
-          });
+        if (this.editedItem.subject == null || this.editedItem.subject == "") {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Subject",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
+          subjectsRef
+            .doc(this.editedItem.id)
+            .update({
+              subject: this.editedItem.subject,
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data updated successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            });
+        }
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     deleteData() {
@@ -239,6 +255,7 @@ export default {
           });
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     close() {

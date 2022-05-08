@@ -234,48 +234,96 @@ export default {
     },
     saveData() {
       try {
-        this.btnLoading = true;
-        var id = uuid();
-        topicsRef
-          .doc(id)
-          .set({
-            id: id,
-            grade: this.editedItem.grade,
-            subject: this.editedItem.subject,
-            topic: this.editedItem.topic,
-            description: this.editedItem.description,
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data added successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
-          });
+        if (this.editedItem.grade == null || this.editedItem.grade == "") {
+          this.$store.dispatch("alertState/message", [
+            "Please select Grade",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.subject == null ||
+          this.editedItem.subject == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Subject",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.topic == null ||
+          this.editedItem.topic == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Topic",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.description == null ||
+          this.editedItem.description == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Description",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
+          var id = uuid();
+          topicsRef
+            .doc(id)
+            .set({
+              id: id,
+              grade: this.editedItem.grade,
+              subject: this.editedItem.subject,
+              topic: this.editedItem.topic,
+              description: this.editedItem.description,
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data added successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            });
+        }
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     updateData() {
       try {
-        this.btnLoading = true;
-        topicsRef
-          .doc(this.editedItem.id)
-          .update({
-            grade: this.editedItem.grade,
-            subject: this.editedItem.subject,
-            topic: this.editedItem.topic,
-            description: this.editedItem.description,
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data updated successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
-          });
+        if (this.editedItem.topic == null || this.editedItem.topic == "") {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Topic",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.description == null ||
+          this.editedItem.description == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Description",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
+          topicsRef
+            .doc(this.editedItem.id)
+            .update({
+              grade: this.editedItem.grade,
+              subject: this.editedItem.subject,
+              topic: this.editedItem.topic,
+              description: this.editedItem.description,
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data updated successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            });
+        }
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     deleteData() {
@@ -294,6 +342,7 @@ export default {
           });
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     close() {

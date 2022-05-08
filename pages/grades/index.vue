@@ -184,42 +184,64 @@ export default {
     },
     saveData() {
       try {
-        this.btnLoading = true;
-        var id = uuid();
-        gradesRef
-          .doc(id)
-          .set({
-            id: id,
-            grade_name: this.editedItem.grade_name,
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data added successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
-          });
+        if (
+          this.editedItem.grade_name == null ||
+          this.editedItem.grade_name == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Grade",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
+          var id = uuid();
+          gradesRef
+            .doc(id)
+            .set({
+              id: id,
+              grade_name: this.editedItem.grade_name,
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data added successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            });
+        }
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     updateData() {
       try {
-        this.btnLoading = true;
-        gradesRef
-          .doc(this.editedItem.id)
-          .update({
-            grade_name: this.editedItem.grade_name,
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data updated successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
-          });
+        if (
+          this.editedItem.grade_name == null ||
+          this.editedItem.grade_name == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Grade",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
+          gradesRef
+            .doc(this.editedItem.id)
+            .update({
+              grade_name: this.editedItem.grade_name,
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data updated successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            });
+        }
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     deleteData() {
@@ -238,6 +260,7 @@ export default {
           });
       } catch (error) {
         console.log(error);
+        this.btnLoading = false;
       }
     },
     close() {
