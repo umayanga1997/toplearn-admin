@@ -346,6 +346,22 @@ export default {
             "error",
           ]);
         } else if (
+          this.editedItem.schedule_date == null ||
+          this.editedItem.schedule_date == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Schedule Date",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.schedule_time == null ||
+          this.editedItem.schedule_time == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Schedule Time",
+            "error",
+          ]);
+        } else if (
           this.editedItem.topic == null ||
           this.editedItem.topic == ""
         ) {
@@ -365,22 +381,6 @@ export default {
         } else if (this.editedItem.link == null || this.editedItem.link == "") {
           this.$store.dispatch("alertState/message", [
             "Please enter Link",
-            "error",
-          ]);
-        } else if (
-          this.editedItem.schedule_date == null ||
-          this.editedItem.schedule_date == ""
-        ) {
-          this.$store.dispatch("alertState/message", [
-            "Please select Schedule Date",
-            "error",
-          ]);
-        } else if (
-          this.editedItem.schedule_time == null ||
-          this.editedItem.schedule_time == ""
-        ) {
-          this.$store.dispatch("alertState/message", [
-            "Please select Schedule Time",
             "error",
           ]);
         } else {
@@ -408,6 +408,7 @@ export default {
               create_date: new Date(),
             })
             .then(() => {
+              this.clear();
               this.$store.dispatch("alertState/message", [
                 "Data added successfully.",
                 "success",
@@ -488,6 +489,11 @@ export default {
         console.log(error);
         this.btnLoading = false;
       }
+    },
+    clear() {
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+      });
     },
     close() {
       this.dialog = false;

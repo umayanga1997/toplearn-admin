@@ -34,7 +34,6 @@
                   v-on="on"
                 >
                   New
-                  {{ dialogType }}
                 </v-btn>
               </template>
               <v-card v-if="dialogType != 'd'">
@@ -200,6 +199,7 @@ export default {
               subject: this.editedItem.subject,
             })
             .then(() => {
+              this.clear();
               this.$store.dispatch("alertState/message", [
                 "Data added successfully.",
                 "success",
@@ -257,6 +257,11 @@ export default {
         console.log(error);
         this.btnLoading = false;
       }
+    },
+    clear() {
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+      });
     },
     close() {
       this.dialog = false;

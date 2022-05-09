@@ -234,23 +234,7 @@ export default {
     },
     saveData() {
       try {
-        if (this.editedItem.grade == null || this.editedItem.grade == "") {
-          this.$store.dispatch("alertState/message", [
-            "Please select Grade",
-            "error",
-          ]);
-        } else if (
-          this.editedItem.subject == null ||
-          this.editedItem.subject == ""
-        ) {
-          this.$store.dispatch("alertState/message", [
-            "Please select Subject",
-            "error",
-          ]);
-        } else if (
-          this.editedItem.topic == null ||
-          this.editedItem.topic == ""
-        ) {
+        if (this.editedItem.topic == null || this.editedItem.topic == "") {
           this.$store.dispatch("alertState/message", [
             "Please enter Topic",
             "error",
@@ -261,6 +245,22 @@ export default {
         ) {
           this.$store.dispatch("alertState/message", [
             "Please enter Description",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.grade == null ||
+          this.editedItem.grade == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Grade",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.subject == null ||
+          this.editedItem.subject == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Subject",
             "error",
           ]);
         } else {
@@ -276,6 +276,7 @@ export default {
               description: this.editedItem.description,
             })
             .then(() => {
+              this.clear();
               this.$store.dispatch("alertState/message", [
                 "Data added successfully.",
                 "success",
@@ -344,6 +345,11 @@ export default {
         console.log(error);
         this.btnLoading = false;
       }
+    },
+    clear() {
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+      });
     },
     close() {
       this.dialog = false;
