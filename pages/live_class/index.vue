@@ -249,7 +249,7 @@ export default {
         sortable: false,
         value: "id",
       },
-      { text: "Grade", value: "grade_name" },
+      { text: "Grade", value: "grade" },
       { text: "Subject", value: "subject" },
       { text: "Topic", value: "topic" },
       { text: "Price", value: "price" },

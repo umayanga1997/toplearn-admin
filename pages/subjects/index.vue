@@ -119,6 +119,8 @@
 <script>
 import { v4 as uuid } from "uuid";
 var subjectsRef;
+var teachersRef;
+var topicsRef;
 
 export default {
   name: "subjects_screen",
@@ -157,6 +159,8 @@ export default {
 
   created() {
     subjectsRef = this.$fire.firestore.collection("subjects");
+    teachersRef = this.$fire.firestore.collection("teachers");
+    topicsRef = this.$fire.firestore.collection("topics");
     this.initialize();
   },
 
@@ -225,6 +229,38 @@ export default {
             .doc(this.editedItem.id)
             .update({
               subject: this.editedItem.subject,
+            })
+            .then(async () => {
+              await this.teachersUpdate(
+                "subject_id",
+                this.editedItem.id,
+                "subject",
+                this.editedItem.subject
+              );
+              await this.topicsUpdate(
+                "subject_id",
+                this.editedItem.id,
+                "subject",
+                this.editedItem.subject
+              );
+              await this.videosUpdate(
+                "subject_id",
+                this.editedItem.id,
+                "subject",
+                this.editedItem.subject
+              );
+              await this.testsUpdate(
+                "subject_id",
+                this.editedItem.id,
+                "subject",
+                this.editedItem.subject
+              );
+              await this.liveClassesUpdate(
+                "subject_id",
+                this.editedItem.id,
+                "subject",
+                this.editedItem.subject
+              );
             })
             .then(() => {
               this.$store.dispatch("alertState/message", [

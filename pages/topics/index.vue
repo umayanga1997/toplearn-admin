@@ -160,7 +160,9 @@ export default {
     loading: false,
     btnLoading: false,
     gradesList: [],
+    gradesListData: [],
     subjectsList: [],
+    subjectsListData: [],
     search: "",
     headers: [
       {
@@ -211,14 +213,18 @@ export default {
         });
         gradesRef.onSnapshot((querySnapshot) => {
           this.gradesList = [];
+          this.gradesListData = [];
           querySnapshot.docs.forEach((doc) => {
-            this.gradesList.push(doc.data()["grade_name"]);
+            this.gradesList.push(doc.data()["grade"]);
+            this.gradesListData.push(doc.data());
           });
         });
         subjectsRef.onSnapshot((querySnapshot) => {
           this.subjectsList = [];
+          this.subjectsListData = [];
           querySnapshot.docs.forEach((doc) => {
             this.subjectsList.push(doc.data()["subject"]);
+            this.subjectsListData.push(doc.data());
           });
         });
       } catch (error) {
@@ -265,12 +271,22 @@ export default {
           ]);
         } else {
           this.btnLoading = true;
+
+          var gradeData = this.gradesListData.filter(
+            (element) => element.grade == this.editedItem.grade
+          );
+          var subjectData = this.subjectsListData.filter(
+            (element) => element.subject == this.editedItem.subject
+          );
+
           var id = uuid();
           topicsRef
             .doc(id)
             .set({
               id: id,
+              grade_id: gradeData?.id,
               grade: this.editedItem.grade,
+              subject_id: subjectData?.id,
               subject: this.editedItem.subject,
               topic: this.editedItem.topic,
               description: this.editedItem.description,
@@ -306,13 +322,43 @@ export default {
           ]);
         } else {
           this.btnLoading = true;
+
+          var gradeData = this.gradesListData.filter(
+            (element) => element.grade == this.editedItem.grade
+          );
+          var subjectData = this.subjectsListData.filter(
+            (element) => element.subject == this.editedItem.subject
+          );
+
           topicsRef
             .doc(this.editedItem.id)
             .update({
+              grade_id: gradeData?.id,
               grade: this.editedItem.grade,
+              subject_id: subjectData?.id,
               subject: this.editedItem.subject,
               topic: this.editedItem.topic,
               description: this.editedItem.description,
+            })
+            .then(async () => {
+              await this.videosUpdate(
+                "topic_id",
+                this.editedItem.id,
+                "topic",
+                this.editedItem.topic
+              );
+              await this.testsUpdate(
+                "topic_id",
+                this.editedItem.id,
+                "topic",
+                this.editedItem.topic
+              );
+              await this.liveClassesUpdate(
+                "topic_id",
+                this.editedItem.id,
+                "topic",
+                this.editedItem.topic
+              );
             })
             .then(() => {
               this.$store.dispatch("alertState/message", [

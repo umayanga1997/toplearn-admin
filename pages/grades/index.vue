@@ -45,7 +45,7 @@
                     <v-row>
                       <v-col>
                         <v-text-field
-                          v-model="editedItem.grade_name"
+                          v-model="editedItem.grade"
                           label="Grade"
                           dense
                           outlined
@@ -120,6 +120,9 @@
 <script>
 import { v4 as uuid } from "uuid";
 var gradesRef;
+var liveClassRef;
+var testsRef;
+var videosRef;
 
 export default {
   name: "grades_screen",
@@ -136,7 +139,7 @@ export default {
         sortable: false,
         value: "id",
       },
-      { text: "Grade", value: "grade_name" },
+      { text: "Grade", value: "grade" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     items: [],
@@ -184,10 +187,7 @@ export default {
     },
     saveData() {
       try {
-        if (
-          this.editedItem.grade_name == null ||
-          this.editedItem.grade_name == ""
-        ) {
+        if (this.editedItem.grade == null || this.editedItem.grade == "") {
           this.$store.dispatch("alertState/message", [
             "Please enter Grade",
             "error",
@@ -199,7 +199,7 @@ export default {
             .doc(id)
             .set({
               id: id,
-              grade_name: this.editedItem.grade_name,
+              grade: this.editedItem.grade,
             })
             .then(() => {
               this.clear();
@@ -217,10 +217,7 @@ export default {
     },
     updateData() {
       try {
-        if (
-          this.editedItem.grade_name == null ||
-          this.editedItem.grade_name == ""
-        ) {
+        if (this.editedItem.grade == null || this.editedItem.grade == "") {
           this.$store.dispatch("alertState/message", [
             "Please enter Grade",
             "error",
@@ -230,7 +227,39 @@ export default {
           gradesRef
             .doc(this.editedItem.id)
             .update({
-              grade_name: this.editedItem.grade_name,
+              grade: this.editedItem.grade,
+            })
+            .then(async () => {
+              await this.teachersUpdate(
+                "grade_id",
+                this.editedItem.id,
+                "grade",
+                this.editedItem.grade
+              );
+              await this.topicsUpdate(
+                "grade_id",
+                this.editedItem.id,
+                "grade",
+                this.editedItem.grade
+              );
+              await this.videosUpdate(
+                "grade_id",
+                this.editedItem.id,
+                "grade",
+                this.editedItem.grade
+              );
+              await this.testsUpdate(
+                "grade_id",
+                this.editedItem.id,
+                "grade",
+                this.editedItem.grade
+              );
+              await this.liveClassesUpdate(
+                "grade_id",
+                this.editedItem.id,
+                "grade",
+                this.editedItem.grade
+              );
             })
             .then(() => {
               this.$store.dispatch("alertState/message", [
