@@ -272,10 +272,10 @@ export default {
         } else {
           this.btnLoading = true;
 
-          var gradeData = this.gradesListData.filter(
+          var gradeData = this.gradesListData.find(
             (element) => element.grade == this.editedItem.grade
           );
-          var subjectData = this.subjectsListData.filter(
+          var subjectData = this.subjectsListData.find(
             (element) => element.subject == this.editedItem.subject
           );
 
@@ -323,10 +323,10 @@ export default {
         } else {
           this.btnLoading = true;
 
-          var gradeData = this.gradesListData.filter(
+          var gradeData = this.gradesListData.find(
             (element) => element.grade == this.editedItem.grade
           );
-          var subjectData = this.subjectsListData.filter(
+          var subjectData = this.subjectsListData.find(
             (element) => element.subject == this.editedItem.subject
           );
 

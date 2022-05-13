@@ -334,12 +334,14 @@ export default {
             this.editedItem.teacher_id =
               "T" + this.editedItem.teacher_id.replace("T", "");
 
-            var gradeData = this.gradesListData.filter(
+            var gradeData = this.gradesListData.find(
               (element) => element.grade == this.editedItem.grade
             );
-            var subjectData = this.subjectsListData.filter(
+            console.log(gradeData);
+            var subjectData = this.subjectsListData.find(
               (element) => element.subject == this.editedItem.subject
             );
+            console.log(subjectData);
 
             teachersRef
               .doc(authID)
@@ -381,10 +383,10 @@ export default {
       try {
         this.btnLoading = true;
 
-        var gradeData = this.gradesListData.filter(
+        var gradeData = this.gradesListData.find(
           (element) => element.grade == this.editedItem.grade
         );
-        var subjectData = this.subjectsListData.filter(
+        var subjectData = this.subjectsListData.find(
           (element) => element.subject == this.editedItem.subject
         );
 
