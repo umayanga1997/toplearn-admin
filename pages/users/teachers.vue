@@ -407,6 +407,26 @@ export default {
             active: this.editedItem.active,
             // reg_date: this.editedItem.reg_date,
           })
+          .then(async () => {
+            await this.videosUpdate(
+              "teacher_id",
+              this.editedItem.teacher_id,
+              "teacher_name",
+              this.editedItem.teacher_name
+            );
+            await this.testsUpdate(
+              "teacher_id",
+              this.editedItem.teacher_id,
+              "teacher_name",
+              this.editedItem.teacher_name
+            );
+            await this.liveClassesUpdate(
+              "teacher_id",
+              this.editedItem.teacher_id,
+              "teacher_name",
+              this.editedItem.teacher_name
+            );
+          })
           .then(() => {
             this.$store.dispatch("alertState/message", [
               "Data updated successfully.",
@@ -423,7 +443,27 @@ export default {
         this.btnLoading = true;
         teachersRef
           .doc(this.editedItem.auth_id)
-          .delete()
+          .get()
+          .then((snapshot) => {
+            snapshot.ref
+              .collection("sold_live_classes")
+              .get((querySnapshot) => {
+                querySnapshot.dosc?.forEach((element) => {
+                  element.ref.delete();
+                });
+              });
+            snapshot.ref.collection("sold_tests").get((querySnapshot) => {
+              querySnapshot.dosc?.forEach((element) => {
+                element.ref.delete();
+              });
+            });
+            snapshot.ref.collection("sold_videos").get((querySnapshot) => {
+              querySnapshot.dosc?.forEach((element) => {
+                element.ref.delete();
+              });
+            });
+            snapshot.ref.delete();
+          })
           .then(() => {
             this.$store.dispatch("alertState/message", [
               "Data deleted successfully.",

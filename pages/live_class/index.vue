@@ -446,7 +446,9 @@ export default {
           liveClassRef
             .doc(this.editedItem.id)
             .update({
+              grade_id: selectedData.grade_id,
               grade: selectedData.grade,
+              subject_id: selectedData.subject_id,
               subject: selectedData.subject,
               teacher_id: this.editedItem.teacher_id,
               teacher_name: selectedData.name,
