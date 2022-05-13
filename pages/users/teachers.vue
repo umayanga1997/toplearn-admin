@@ -337,11 +337,10 @@ export default {
             var gradeData = this.gradesListData.find(
               (element) => element.grade == this.editedItem.grade
             );
-            console.log(gradeData);
+
             var subjectData = this.subjectsListData.find(
               (element) => element.subject == this.editedItem.subject
             );
-            console.log(subjectData);
 
             teachersRef
               .doc(authID)
