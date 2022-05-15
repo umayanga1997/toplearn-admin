@@ -16,10 +16,6 @@ thead tr th {
   max-height: 38px !important;
 }
 
-.v-select__slot .v-label {
-  color: black !important;
-}
-
 .text-area-max-height {
   max-height: 110px !important;
 }

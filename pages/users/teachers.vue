@@ -46,6 +46,14 @@
               <v-card-text>
                 <v-container>
                   <v-row>
+                    <v-col v-if="dialogType == 'a'" cols="12">
+                      <v-text-field
+                        v-model="editedItem.auth_id"
+                        label="Auth ID"
+                        dense
+                        outlined
+                      ></v-text-field>
+                    </v-col>
                     <v-col
                       v-if="dialogType == 'a'"
                       cols="12"
@@ -92,7 +100,13 @@
                       lg="6"
                       sm="12"
                     ></v-col>
-                    <v-col cols="12" md="6" lg="6" sm="12">
+                    <v-col
+                      v-if="dialogType == 'a'"
+                      cols="12"
+                      md="6"
+                      lg="6"
+                      sm="12"
+                    >
                       <v-text-field
                         v-model="editedItem.email"
                         label="Email"
@@ -100,7 +114,13 @@
                         outlined
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" md="6" lg="6" sm="12">
+                    <v-col
+                      v-if="dialogType == 'a'"
+                      cols="12"
+                      md="6"
+                      lg="6"
+                      sm="12"
+                    >
                       <v-text-field
                         v-model="editedItem.password"
                         label="Password"
@@ -319,60 +339,136 @@ export default {
     },
     saveData() {
       try {
-        this.btnLoading = true;
-        // Firebase auth
-        this.$fire.auth
-          .createUserWithEmailAndPassword(
-            this.editedItem.email,
-            this.editedItem.password
-          )
-          .then((userCredential) => {
-            // Signed in
-            return userCredential.user?.uid;
-          })
-          .then((authID) => {
-            this.editedItem.teacher_id =
-              "T" + this.editedItem.teacher_id.replace("T", "");
+        if (this.editedItem.auth_id == null || this.editedItem.auth_id == "") {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Auth ID",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.teacher_id == null ||
+          this.editedItem.teacher_id == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Teacher ID",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.teacher_name == null ||
+          this.editedItem.teacher_name == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Teacher Name",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.mobile_no == null ||
+          this.editedItem.mobile_no == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Mobile No",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.medium == null ||
+          this.editedItem.medium == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Medium",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.email == null ||
+          this.editedItem.email == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Email Address",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.password == null ||
+          this.editedItem.password == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Password",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.edu_qualifications == null ||
+          this.editedItem.edu_qualifications == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Education Qualifications",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.grade == null ||
+          this.editedItem.grade == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Grade",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.subject == null ||
+          this.editedItem.subject == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Subject",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.active == null ||
+          this.editedItem.active == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Active Status",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
 
-            var gradeData = this.gradesListData.find(
-              (element) => element.grade == this.editedItem.grade
-            );
+          this.editedItem.teacher_id =
+            "T" + this.editedItem.teacher_id.replace("T", "");
 
-            var subjectData = this.subjectsListData.find(
-              (element) => element.subject == this.editedItem.subject
-            );
+          var gradeData = this.gradesListData.find(
+            (element) => element.grade == this.editedItem.grade
+          );
 
-            teachersRef
-              .doc(authID)
-              .set({
-                auth_id: authID,
-                teacher_id: this.editedItem.teacher_id,
-                name: this.editedItem.name,
-                mobile_no: this.editedItem.mobile_no,
-                medium: this.editedItem.medium,
-                email: this.editedItem.email,
-                password: this.editedItem.password,
-                edu_qualifications: this.editedItem.edu_qualifications,
-                description: this.editedItem.description,
-                grade_id: gradeData?.id,
-                grade: this.editedItem.grade,
-                subject: this.editedItem.subject,
-                subject_id: subjectData?.id,
-                active: this.editedItem.active,
-                reg_date: new Date(),
-              })
-              .then(() => {
-                this.$store.dispatch("alertState/message", [
-                  "Data added successfully.",
-                  "success",
-                ]);
-                this.btnLoading = false;
-              });
-          })
-          .catch((error) => {
-            this.btnLoading = false;
-            this.$store.dispatch("alertState/message", [error, "error"]);
-          });
+          var subjectData = this.subjectsListData.find(
+            (element) => element.subject == this.editedItem.subject
+          );
+
+          teachersRef
+            .doc(this.editedItem.auth_id)
+            .set({
+              auth_id: this.editedItem.auth_id,
+              teacher_id: this.editedItem.teacher_id,
+              name: this.editedItem.name,
+              mobile_no: this.editedItem.mobile_no,
+              medium: this.editedItem.medium,
+              email: this.editedItem.email,
+              password: this.editedItem.password,
+              edu_qualifications: this.editedItem.edu_qualifications,
+              description: this.editedItem.description ?? "",
+              grade_id: gradeData?.id,
+              grade: this.editedItem.grade,
+              subject: this.editedItem.subject,
+              subject_id: subjectData?.id,
+              active: this.editedItem.active,
+              reg_date: new Date(),
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data added successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            })
+            .catch((error) => {
+              this.btnLoading = false;
+              this.$store.dispatch("alertState/message", [error, "error"]);
+            });
+        }
       } catch (error) {
         console.log(error);
         this.btnLoading = false;
@@ -380,61 +476,124 @@ export default {
     },
     updateData() {
       try {
-        this.btnLoading = true;
+        if (
+          this.editedItem.teacher_name == null ||
+          this.editedItem.teacher_name == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Teacher Name",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.mobile_no == null ||
+          this.editedItem.mobile_no == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Mobile No",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.medium == null ||
+          this.editedItem.medium == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Medium",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.edu_qualifications == null ||
+          this.editedItem.edu_qualifications == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please enter Education Qualifications",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.grade == null ||
+          this.editedItem.grade == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Grade",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.subject == null ||
+          this.editedItem.subject == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Subject",
+            "error",
+          ]);
+        } else if (
+          this.editedItem.active == null ||
+          this.editedItem.active == ""
+        ) {
+          this.$store.dispatch("alertState/message", [
+            "Please select Active Status",
+            "error",
+          ]);
+        } else {
+          this.btnLoading = true;
 
-        var gradeData = this.gradesListData.find(
-          (element) => element.grade == this.editedItem.grade
-        );
-        var subjectData = this.subjectsListData.find(
-          (element) => element.subject == this.editedItem.subject
-        );
+          // Find new selected items data
+          var gradeData = this.gradesListData.find(
+            (element) => element.grade == this.editedItem.grade
+          );
+          var subjectData = this.subjectsListData.find(
+            (element) => element.subject == this.editedItem.subject
+          );
 
-        teachersRef
-          .doc(this.editedItem.auth_id)
-          .update({
-            // auth_id: null,
-            // teacher_id: id,
-            name: this.editedItem.name,
-            mobile_no: this.editedItem.mobile_no,
-            medium: this.editedItem.medium,
-            // email: this.editedItem.email,
-            // password: this.editedItem.password,
-            edu_qualifications: this.editedItem.edu_qualifications,
-            description: this.editedItem.description,
-            grade_id: gradeData?.id,
-            grade: this.editedItem.grade,
-            subject: this.editedItem.subject,
-            subject_id: subjectData?.id,
-            active: this.editedItem.active,
-            // reg_date: this.editedItem.reg_date,
-          })
-          .then(async () => {
-            await this.videosUpdate(
-              "teacher_id",
-              this.editedItem.teacher_id,
-              "teacher_name",
-              this.editedItem.teacher_name
-            );
-            await this.testsUpdate(
-              "teacher_id",
-              this.editedItem.teacher_id,
-              "teacher_name",
-              this.editedItem.teacher_name
-            );
-            await this.liveClassesUpdate(
-              "teacher_id",
-              this.editedItem.teacher_id,
-              "teacher_name",
-              this.editedItem.teacher_name
-            );
-          })
-          .then(() => {
-            this.$store.dispatch("alertState/message", [
-              "Data updated successfully.",
-              "success",
-            ]);
-            this.btnLoading = false;
-          });
+          teachersRef
+            .doc(this.editedItem.auth_id)
+            .update({
+              // auth_id: null,
+              // teacher_id: id,
+              name: this.editedItem.name,
+              mobile_no: this.editedItem.mobile_no,
+              medium: this.editedItem.medium,
+              // email: this.editedItem.email,
+              // password: this.editedItem.password,
+              edu_qualifications: this.editedItem.edu_qualifications,
+              description: this.editedItem.description ?? "",
+              grade_id: gradeData?.id,
+              grade: this.editedItem.grade,
+              subject: this.editedItem.subject,
+              subject_id: subjectData?.id,
+              active: this.editedItem.active,
+              // reg_date: this.editedItem.reg_date,
+            })
+            .then(async () => {
+              await this.videosUpdate(
+                "teacher_id",
+                this.editedItem.teacher_id,
+                "teacher_name",
+                this.editedItem.teacher_name
+              );
+              await this.testsUpdate(
+                "teacher_id",
+                this.editedItem.teacher_id,
+                "teacher_name",
+                this.editedItem.teacher_name
+              );
+              await this.liveClassesUpdate(
+                "teacher_id",
+                this.editedItem.teacher_id,
+                "teacher_name",
+                this.editedItem.teacher_name
+              );
+            })
+            .then(() => {
+              this.$store.dispatch("alertState/message", [
+                "Data updated successfully.",
+                "success",
+              ]);
+              this.btnLoading = false;
+            })
+            .catch((error) => {
+              this.btnLoading = false;
+              this.$store.dispatch("alertState/message", [error, "error"]);
+            });
+        }
       } catch (error) {
         console.log(error);
       }
