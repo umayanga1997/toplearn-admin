@@ -120,9 +120,6 @@
 <script>
 import { v4 as uuid } from "uuid";
 var gradesRef;
-var liveClassRef;
-var testsRef;
-var videosRef;
 
 export default {
   name: "grades_screen",
