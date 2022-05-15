@@ -1,9 +1,11 @@
 <template>
-  <v-row justify="center" align="center"> </v-row>
+  <div>
+    <loading-compo />
+  </div>
 </template>
 
 <script>
 export default {
-  name: "IndexPage",
+  name: "DefaultLayout",
 };
 </script>

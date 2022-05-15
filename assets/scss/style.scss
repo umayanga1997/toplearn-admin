@@ -1,29 +1,45 @@
 .search-container {
-    display: flex;
-    justify-content: flex-end;
-  }
-  thead {
-    // background: white;
-    & tr {
-      & th {
-        color: rgb(136, 0, 52) !important;
-        font-size: 14px !important;
-      }
+  display: flex;
+  justify-content: flex-end;
+}
+thead {
+  // background: white;
+  & tr {
+    & th {
+      color: rgb(136, 0, 52) !important;
+      font-size: 14px !important;
     }
   }
-  .v-input {
-    max-height: 38px !important;
+}
+.v-input {
+  max-height: 38px !important;
+}
+.v-select__slot {
+  & .v-label {
+    color: black !important;
   }
-  .v-select__slot {
-    & .v-label {
-      color: black !important;
-    }
-  }
+}
 
-  // .v-input {
-  //   max-height: 35px !important;
-  // }
-  .text-area-max-height {
-    max-height: 110px !important;
-  }
-  
+// .v-input {
+//   max-height: 35px !important;
+// }
+.text-area-max-height {
+  max-height: 110px !important;
+}
+
+.page-loading {
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.5s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}
