@@ -352,10 +352,7 @@ export default {
             "Please enter Teacher ID",
             "error",
           ]);
-        } else if (
-          this.editedItem.teacher_name == null ||
-          this.editedItem.teacher_name == ""
-        ) {
+        } else if (this.editedItem.name == null || this.editedItem.name == "") {
           this.$store.dispatch("alertState/message", [
             "Please enter Teacher Name",
             "error",
@@ -476,10 +473,7 @@ export default {
     },
     updateData() {
       try {
-        if (
-          this.editedItem.teacher_name == null ||
-          this.editedItem.teacher_name == ""
-        ) {
+        if (this.editedItem.name == null || this.editedItem.name == "") {
           this.$store.dispatch("alertState/message", [
             "Please enter Teacher Name",
             "error",
@@ -566,20 +560,20 @@ export default {
               await this.videosUpdate(
                 "teacher_id",
                 this.editedItem.teacher_id,
-                "teacher_name",
-                this.editedItem.teacher_name
+                "name",
+                this.editedItem.name
               );
               await this.testsUpdate(
                 "teacher_id",
                 this.editedItem.teacher_id,
-                "teacher_name",
-                this.editedItem.teacher_name
+                "name",
+                this.editedItem.name
               );
               await this.liveClassesUpdate(
                 "teacher_id",
                 this.editedItem.teacher_id,
-                "teacher_name",
-                this.editedItem.teacher_name
+                "name",
+                this.editedItem.name
               );
             })
             .then(() => {
