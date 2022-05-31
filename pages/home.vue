@@ -43,9 +43,9 @@
           :bg_color="'purple darken-3'"
         ></dashoard-card>
         <dashoard-card
-          headline="Live Classes"
-          :title="'S.Count : ' + count_of_live_class_enrolment"
-          :subtitle="'S.Amount : ' + amount_of_live_class_enrolment.toFixed(2)"
+          headline="Tutes"
+          :title="'S.Count : ' + count_of_tutes"
+          :subtitle="'S.Amount : ' + amount_of_tutes.toFixed(2)"
           :head_color="'yellow--text'"
           :title_color="'white--text'"
           :subtitle_color="'white--text'"
@@ -78,6 +78,7 @@
           :headers="headers"
           :items="items"
           :search="search"
+          item-key="s_id"
           sort-by="sold_date"
         >
           <template v-slot:item.sold_date="{ item }">
@@ -110,8 +111,8 @@ export default {
       amount_of_videos_sale: 0,
       count_of_tests_sale: 0,
       amount_of_tests_sale: 0,
-      count_of_live_class_enrolment: 0,
-      amount_of_live_class_enrolment: 0,
+      count_of_tutes: 0,
+      amount_of_tutes: 0,
       total_income: 0,
       headers: [
         // {
@@ -198,13 +199,12 @@ export default {
                   });
                 });
               await querySnapshotMain.docs[key].ref
-                .collection("sold_live_classes")
+                .collection("sold_tutes")
                 .get()
                 .then((querySnapshot) => {
                   querySnapshot.docs?.forEach((element) => {
-                    this.count_of_live_class_enrolment += 1;
-                    this.amount_of_live_class_enrolment +=
-                      element.data()["price"] ?? 0;
+                    this.count_of_tutes += 1;
+                    this.amount_of_tutes += element.data()["price"] ?? 0;
                     this.items.push({
                       ...element.data(),
                       teacher_id:
@@ -228,7 +228,7 @@ export default {
                 this.total_income =
                   this.amount_of_videos_sale +
                   this.amount_of_tests_sale +
-                  this.amount_of_live_class_enrolment;
+                  this.amount_of_tutes;
                 //
                 this.loading = false;
               })

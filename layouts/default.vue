@@ -109,6 +109,11 @@ export default {
           to: "/live_class",
         },
         {
+          icon: "mdi-note",
+          title: "Tutes",
+          to: "/tutes",
+        },
+        {
           icon: "mdi-account-multiple",
           title: "Teachers",
           to: "/users/teachers",
