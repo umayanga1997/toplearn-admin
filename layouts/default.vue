@@ -103,11 +103,11 @@ export default {
           title: "Tests",
           to: "/tests",
         },
-        {
-          icon: "mdi-video-vintage",
-          title: "Live Class",
-          to: "/live_class",
-        },
+        // {
+        //   icon: "mdi-video-vintage",
+        //   title: "Live Class",
+        //   to: "/live_class",
+        // },
         {
           icon: "mdi-note",
           title: "Tutes",
