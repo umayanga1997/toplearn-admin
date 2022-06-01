@@ -251,11 +251,17 @@ export default {
                 "grade",
                 this.editedItem.grade
               );
-              await this.liveClassesUpdate(
+              // await this.liveClassesUpdate(
+              //   "grade_id",
+              //   this.editedItem.id,
+              //   "grade",
+              //   this.editedItem.grade
+              // );
+              await this.tutesUpdate(
                 "grade_id",
                 this.editedItem.id,
                 "grade",
-                this.editedItem.grade
+                this.editedItem.subject
               );
             })
             .then(() => {

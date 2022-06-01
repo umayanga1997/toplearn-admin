@@ -560,19 +560,25 @@ export default {
               await this.videosUpdate(
                 "teacher_id",
                 this.editedItem.teacher_id,
-                "name",
+                "teacher_name",
                 this.editedItem.name
               );
               await this.testsUpdate(
                 "teacher_id",
                 this.editedItem.teacher_id,
-                "name",
+                "teacher_name",
                 this.editedItem.name
               );
-              await this.liveClassesUpdate(
+              // await this.liveClassesUpdate(
+              //   "teacher_id",
+              //   this.editedItem.teacher_id,
+              //   "teacher_name",
+              //   this.editedItem.name
+              // );
+              await this.tutesUpdate(
                 "teacher_id",
                 this.editedItem.teacher_id,
-                "name",
+                "teacher_name",
                 this.editedItem.name
               );
             })

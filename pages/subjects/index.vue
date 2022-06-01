@@ -255,7 +255,13 @@ export default {
                 "subject",
                 this.editedItem.subject
               );
-              await this.liveClassesUpdate(
+              // await this.liveClassesUpdate(
+              //   "subject_id",
+              //   this.editedItem.id,
+              //   "subject",
+              //   this.editedItem.subject
+              // );
+              await this.tutesUpdate(
                 "subject_id",
                 this.editedItem.id,
                 "subject",
