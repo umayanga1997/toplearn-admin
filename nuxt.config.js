@@ -5,18 +5,23 @@ export default {
   ssr: true,
 
   head: {
-    titleTemplate: "%s - toplearn-admin",
-    title: "toplearn-admin",
+    titleTemplate: "%s - TLA",
+    title: "Top Learn-Admin",
     htmlAttrs: {
       lang: "en",
     },
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { hid: "description", name: "description", content: "" },
+      {
+        hid: "description",
+        name: "description",
+        content:
+          "At Top Learn Education, we strongly believe that Education is the most powerful weapon you can use to change the world. We will support relentlessly to solve student problems related to their curriculum at a reasonable cost.",
+      },
       { name: "format-detection", content: "telephone=no" },
     ],
-    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
+    link: [{ rel: "icon", type: "image/x-icon", href: "/icon.png" }],
   },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["@/assets/scss/style.css"],

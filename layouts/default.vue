@@ -27,7 +27,11 @@
     </v-navigation-drawer>
     <v-app-bar fixed dense color="blue darken-4" dark app elevation="1">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title v-text="'Top-Learn Admin'" />
+
+      <v-toolbar-title>
+        <img width="100" class="pt-2" src="~/assets/logo/logo-large.png" />
+      </v-toolbar-title>
+
       <v-spacer />
 
       <v-btn icon @click="signOut()"
